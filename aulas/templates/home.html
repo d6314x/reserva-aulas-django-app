@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+{% load widget_tweaks %}
+
+{% block content %}
+  <div class="container my-4">
+    <h1 class="mb-4">Sistema de Reservación de Aulas</h1>
+
+    {% if user.is_authenticated %}
+      <div class="alert alert-success">
+        Bienvenido, <strong>{{ user.username }}</strong>
+      </div>
+      <a href="{% url 'reservar_aula' %}" class="btn btn-primary mb-4">Hacer una reserva</a>
+    {% else %}
+      <div class="alert alert-info">
+        <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm">Inicia sesión</a>
+        o
+        <a href="{% url 'register' %}" class="btn btn-outline-secondary btn-sm">Regístrate</a>
+        para hacer reservas.
+      </div>
+    {% endif %}
+
+    <h2 class="mt-5">Aulas disponibles</h2>
+    <ul class="list-group mb-4">
+      {% for aula in aulas %}
+        <li class="list-group-item">
+          <strong>{{ aula.nombre }}</strong> — Capacidad: {{ aula.capacidad }} ({{ aula.ubicacion }})
+        </li>
+      {% empty %}
+        <li class="list-group-item text-muted">No hay aulas registradas.</li>
+      {% endfor %}
+    </ul>
+
+    <h2>Reservas realizadas</h2>
+    <ul class="list-group">
+      {% for reserva in reservas %}
+        <li class="list-group-item">
+          <strong>{{ reserva.aula.nombre }}</strong> reservado por <em>{{ reserva.usuario.username }}</em>
+          el {{ reserva.fecha }} de {{ reserva.hora_inicio }} a {{ reserva.hora_fin }}
+        </li>
+      {% empty %}
+        <li class="list-group-item text-muted">No hay reservas aún.</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
