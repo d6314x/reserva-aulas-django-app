@@ -31,8 +31,36 @@
       {% endfor %}
     </ul>
 
+    <h2>Calendario semanal</h2>
+    <div id="calendar"></div>
+  </div>
+
+  <!-- FullCalendar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+
+  <!-- FullCalendar JS -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridWeek',
+        locale: 'es',
+        slotMinTime: "07:00:00",
+        slotMaxTime: "21:00:00",
+        allDaySlot: false,
+        events: "{% url 'reservas_json' %}"
+      });
+
+      calendar.render();
+    });
+  </script>
+
+
     <h2>Reservas realizadas</h2>
-    <ul class="list-group">
+    <ul class="list-group mb-4">
       {% for reserva in reservas %}
         <li class="list-group-item">
           <strong>{{ reserva.aula.nombre }}</strong> reservado por <em>{{ reserva.usuario.username }}</em>
@@ -42,5 +70,6 @@
         <li class="list-group-item text-muted">No hay reservas aún.</li>
       {% endfor %}
     </ul>
-  </div>
+
+
 {% endblock %}
